@@ -138,7 +138,9 @@ var restart = function () {
     frameCount = null;
     tiles = initializeTiles()
 };
-
+function touchMoved() {
+    return false;
+}
 mouseClicked = function () {
     if (startGame === 0) {
         //rect(200 * ratio, 320 * ratio, 180 * ratio, 40 * ratio, 10);
