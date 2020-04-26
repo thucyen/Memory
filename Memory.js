@@ -17,7 +17,10 @@ let Color1, Color2;
 let userTurn = 1;
 let winner = 0;
 let time = 0;
-
+let startX = 0;
+let endX = 0;
+let startY = 0;
+let endY = 0;
 var numTries = 0;
 var numMatches1 = 0;
 var numMatches2 = 0;
