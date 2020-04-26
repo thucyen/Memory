@@ -3,8 +3,11 @@ const NUM_COLS = 4;
 const NUM_ROWS = 4;
 let spaceX = 400 - NUM_COLS * 78;
 let spaceY = 400 - NUM_ROWS * 78;
-
+let x;
+let Tree1;
 let spring;
+let dandelion;
+let startGame = 0;
 let tiles;
 var flippedTiles = [];
 let ratio = 1;
@@ -42,8 +45,11 @@ const shuffle = function (input) {
 function preload() {
     Color1 = loadImage("avatars/Color1.png");
     Color2 = loadImage("avatars/Color2.png");
+    mainfont = loadFont('avatars/bodoni-mt.ttf')
     spring = loadImage("avatars/background.png");
-    const Tree1 = loadImage("avatars/Tree1.png");
+    social = loadImage("avatars/Social.jpg");
+    dandelion = loadImage("avatars/dandelion.png");
+    Tree1 = loadImage("avatars/Tree1.png");
     const Tree2 = loadImage("avatars/Tree2.png");
     const Tree3 = loadImage("avatars/Tree3.png");
     const Tree4 = loadImage("avatars/Tree4.png");
@@ -132,8 +138,16 @@ var restart = function () {
     frameCount = null;
     tiles = initializeTiles()
 };
+
 mouseClicked = function () {
-    if (game === true) {
+    if (startGame === 0) {
+        //rect(200 * ratio, 320 * ratio, 180 * ratio, 40 * ratio, 10);
+        if (mouseX >= 110 * ratio && mouseX <= 310 * ratio && mouseY >= 300 * ratio && mouseY <= 340 * ratio) {
+            startGame = 1;
+            mouseX = 0;
+        }
+    }
+    if (game === true && startGame !== 0) {
         for (var i = 0; i < tiles.length; i++) {
             var tile = tiles[i];
             if (tile.isUnderMouse(mouseX, mouseY)) {
@@ -173,57 +187,82 @@ mouseClicked = function () {
 
 function draw() {
     background(255, 255, 255);
+    x = cos(millis() * 0.01);
+    textFont(mainfont);
     image(spring, 0, 0, 400 * ratio, 400 * ratio);
-    numMatches = numMatches1 + numMatches2;
-    textSize(13 * ratio);
-    text('Player: ' + userTurn, 50 * ratio, 40 * ratio);
-    text('Player 1: ' + numMatches1, 300 * ratio, 40 * ratio);
-    text('Player 2: ' + numMatches2, 300 * ratio, 59 * ratio);
-    if (delayStartFC && (frameCount - delayStartFC) > 30) {
-        for (var i = 0; i < tiles.length; i++) {
-            var tile = tiles[i];
-            if (!tile.isMatch) {
-                tile.isFaceUp = false;
-            }
-        }
-        flippedTiles = [];
-        delayStartFC = null;
-    }
-    for (let tile of tiles) {
-        let color;
-        if (mouseX >= tile.x && mouseX <= tile.x + tile.width && mouseY >= tile.y && mouseY <= tile.y + tile.width) {
-            color = Color2;
-        }
-        else {
-            color = Color1
-        }
-        tile.draw(color);
-    }
-    fill(0, 0, 0);
-    textSize(20);
-    if (numMatches === tiles.length / 2) {
-        textAlign(CENTER);
-        game = false;
-        fill(255);
-        rect(0, 0, 400 * ratio, 400 * ratio);
-        fill(255);
+    if (startGame === 0) {
         image(spring, 0, 0, 400 * ratio, 400 * ratio);
-        rect(150 * ratio, 300 * ratio, 100 * ratio, 40 * ratio);
-        fill(0, 0, 0);
-        text("Restart", 200 * ratio, 325 * ratio);
-        textSize(25 * ratio);
-        if (numMatches1 > numMatches2) {
-            winner = 1;
-            text("The winner is Player " + winner + "!!!", 200 * ratio, 100 * ratio);
-        } else if (numMatches1 < numMatches2) {
-            winner = 2;
-            text("The winner is Player " + winner + "!!!", 200 * ratio, 100 * ratio);
-        } else if (numMatches1 === numMatches2) {
-            text("Both of you are the winners!", 200 * ratio, 100 * ratio);
-        }
-    } else {
-        time++;
+        image(Tree1, 30 * ratio, 170 * ratio, 120 * ratio, 120 * ratio);
+        textSize(50 * ratio);
+        textAlign(CENTER);
+        text('Spr ng memor es', 200 * ratio, 120 * ratio);
+        textAlign(LEFT);
+        fill(200, 30, 0);
+        text('i', 98 * ratio, 120 * ratio + x * 3);
+        text('i', 320 * ratio, 120 * ratio - x * 3);
+        rectMode(CENTER);
+        noStroke();
+        fill('rgba(227, 229, 58, 0.6)');
+        rect(200 * ratio, 320 * ratio, 180 * ratio, 40 * ratio, 10);
+        textSize(22 * ratio);
+        fill(0);
+        textAlign(CENTER);
+        text('Click here to start', 200 * ratio, 325 * ratio);
+        rectMode(CORNER);
+        textAlign(LEFT);
+    }
+    else if (startGame !== 0) {
+        numMatches = numMatches1 + numMatches2;
         textSize(13 * ratio);
-        text('Time: ' + floor(time / 50), 50 * ratio, 60 * ratio);
+        text('Player: ' + userTurn, 50 * ratio, 40 * ratio);
+        text('Player 1: ' + numMatches1, 300 * ratio, 40 * ratio);
+        text('Player 2: ' + numMatches2, 300 * ratio, 59 * ratio);
+        if (delayStartFC && (frameCount - delayStartFC) > 30) {
+            for (var i = 0; i < tiles.length; i++) {
+                var tile = tiles[i];
+                if (!tile.isMatch) {
+                    tile.isFaceUp = false;
+                }
+            }
+            flippedTiles = [];
+            delayStartFC = null;
+        }
+        for (let tile of tiles) {
+            let color;
+            if (mouseX >= tile.x && mouseX <= tile.x + tile.width && mouseY >= tile.y && mouseY <= tile.y + tile.width) {
+                color = Color2;
+            }
+            else {
+                color = Color1
+            }
+            tile.draw(color);
+        }
+        fill(0, 0, 0);
+        textSize(20);
+        if (numMatches === tiles.length / 2) {
+            textAlign(CENTER);
+            game = false;
+            fill(255);
+            rect(0, 0, 400 * ratio, 400 * ratio);
+            fill('rgba(255,255,255,0.5)');
+            image(spring, 0, 0, 400 * ratio, 400 * ratio);
+            rect(150 * ratio, 300 * ratio, 100 * ratio, 40 * ratio);
+            fill(0, 0, 0);
+            textSize(25 * ratio);
+            text("Restart", 200 * ratio, 325 * ratio);
+            if (numMatches1 > numMatches2) {
+                winner = 1;
+                text("The winner is Player " + winner + "!!!", 200 * ratio, 100 * ratio);
+            } else if (numMatches1 < numMatches2) {
+                winner = 2;
+                text("The winner is Player " + winner + "!!!", 200 * ratio, 100 * ratio);
+            } else if (numMatches1 === numMatches2) {
+                text("Both of you are the winners!", 200 * ratio, 100 * ratio);
+            }
+        } else {
+            time++;
+            textSize(13 * ratio);
+            text('Time: ' + floor(time / 50), 50 * ratio, 60 * ratio);
+        }
     }
 };
