@@ -120,6 +120,17 @@ function setup() {
     createCanvas(400 * ratio, 400 * ratio);
 
     tiles = initializeTiles();
+    function touchStarted() {
+        startX = mouseX;
+        startY = mouseY
+        return false;
+    }
+
+    function touchEnded() {
+        endX = mouseX;
+        endY = mouseY
+        return false;
+    }
 
 }
 
