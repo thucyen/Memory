@@ -1,0 +1,14 @@
+{
+  "name": "memory",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/thucyen/Memory.git",
+  "author": "Yen Trinh <trinhthucyen@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^0.12.1"
+  },
+  "scripts": {
+    "start": "http-server ."
+  }
+}
